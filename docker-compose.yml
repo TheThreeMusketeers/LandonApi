@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  landonapi:
+    image: landonapi
+    build:
+      context: ./LandonApi
+      dockerfile: Dockerfile
