@@ -13,6 +13,7 @@ using LandonApi.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using LandonApi.Filters;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace LandonApi
 {
@@ -48,6 +49,32 @@ namespace LandonApi
                 opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ApiVersionSelector = new CurrentImplementationApiVersionSelector(opt);
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "Landon API"
+                    ,
+                    Version = "v1"
+                    ,
+                    Description = "Asp Net Core Rest Api"
+                    ,
+                    Contact = new Contact
+                    {
+                        Name = "Ersin SİVAZ"
+                        ,
+                        Email = "",
+                        Url = "http://www.ersinsivaz.com"
+                    },
+                    License = new License
+                    {
+                        Name = "Under GNU"
+                        ,
+                        Url = "http://www.ersinsivaz.com"
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +86,12 @@ namespace LandonApi
             }
 
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Landon API v1.0");
+            });
         }
     }
 }
