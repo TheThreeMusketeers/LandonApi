@@ -19,6 +19,7 @@ namespace LandonApi
 {
     public class Startup
     {
+      
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +33,10 @@ namespace LandonApi
             services.AddMvc(opt => 
             {
                 opt.Filters.Add(typeof(JsonExceptionFilter));
+
+                //Require Https for all controllers
+                opt.SslPort = 44300;
+                opt.Filters.Add(typeof(RequireHttpsAttribute));
 
                 var jsonFormatter = opt.OutputFormatters.OfType<JsonOutputFormatter>().Single();
                 opt.OutputFormatters.Remove(jsonFormatter);
@@ -83,7 +88,15 @@ namespace LandonApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
+
+            app.UseHsts(opt => 
+            {
+                opt.MaxAge(days: 180);
+                opt.IncludeSubdomains();
+                opt.Preload();
+            });
 
             app.UseMvc();
 
